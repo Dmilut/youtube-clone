@@ -1,5 +1,6 @@
 package com.dmilut.youtubeclone.service;
 
+import com.dmilut.youtubeclone.dto.UploadVideoResponse;
 import com.dmilut.youtubeclone.dto.VideoDTO;
 import com.dmilut.youtubeclone.model.Video;
 import com.dmilut.youtubeclone.model.VideoStatus;
@@ -17,12 +18,14 @@ public class VideoService {
     private final S3Service s3Service;
     private final VideoRepository videoRepository;
 
-    public void uploadVideo(MultipartFile multipartFile) {
+    public UploadVideoResponse uploadVideo(MultipartFile multipartFile) {
         String videoUrl = s3Service.uploadFile(multipartFile);
         Video video = new Video();
         video.setVideoUrl(videoUrl);
 
-        videoRepository.save(video);
+        Video savedVideo = videoRepository.save(video);
+
+        return new UploadVideoResponse(savedVideo.getId(), videoUrl);
     }
 
     public VideoDTO editVideo(VideoDTO videoDTO) {
