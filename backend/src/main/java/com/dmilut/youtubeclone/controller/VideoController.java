@@ -1,5 +1,6 @@
 package com.dmilut.youtubeclone.controller;
 
+import com.dmilut.youtubeclone.dto.VideoDTO;
 import com.dmilut.youtubeclone.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,15 @@ public class VideoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void uploadVideo(@RequestParam("file")MultipartFile file){
+    public void uploadVideo(@RequestParam("file") MultipartFile file) {
         videoService.uploadVideo(file);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDTO editVideoMetadata(@RequestBody VideoDTO videoDTO) {
+
+        return videoService.editVideo(videoDTO);
     }
 
 }
