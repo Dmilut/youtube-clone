@@ -3,13 +3,10 @@ package com.dmilut.youtubeclone.service;
 import com.dmilut.youtubeclone.dto.UploadVideoResponse;
 import com.dmilut.youtubeclone.dto.VideoDTO;
 import com.dmilut.youtubeclone.model.Video;
-import com.dmilut.youtubeclone.model.VideoStatus;
 import com.dmilut.youtubeclone.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -50,10 +47,10 @@ public class VideoService {
 
         videoRepository.save(savedVideo);
 
-        return  thumbnailURL;
+        return thumbnailURL;
     }
 
-    private Video getVideoById(String videoId){
+    private Video getVideoById(String videoId) {
         return videoRepository.findById(videoId)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find video by id " + videoId));
     }
