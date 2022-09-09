@@ -1,4 +1,4 @@
 export interface UploadVideoResponse{
-    videoId: string,
-    videoUrl: string
+  videoId: string,
+  videoUrl: string;
 }

@@ -5,16 +5,17 @@ import { SaveVideoDetailsComponent } from './save-video-details/save-video-detai
 
 const routes: Routes = [
   {
-    path: 'upload-video', component: UploadVideoComponent
-    
+    path: 'upload-video',
+    component: UploadVideoComponent,
   },
   {
-    path: 'save-video-details/:videoId', component: SaveVideoDetailsComponent
-  }
+    path: 'save-video-details/:videoId',
+    component: SaveVideoDetailsComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

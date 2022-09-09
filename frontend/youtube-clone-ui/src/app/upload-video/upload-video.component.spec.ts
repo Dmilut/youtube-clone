@@ -11,7 +11,9 @@ describe('UploadVideoComponent', () => {
       declarations: [ UploadVideoComponent ]
     })
     .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(UploadVideoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
