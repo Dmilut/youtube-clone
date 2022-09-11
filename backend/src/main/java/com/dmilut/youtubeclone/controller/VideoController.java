@@ -39,6 +39,8 @@ public class VideoController {
     @ResponseStatus(HttpStatus.OK)
     public VideoDTO getVideoDetails(@PathVariable String videoId) {
         VideoDTO videoDTO = videoService.getVideoDetails(videoId);
+
         return videoDTO;
     }
+
 }
