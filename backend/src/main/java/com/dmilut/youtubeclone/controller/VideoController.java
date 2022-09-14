@@ -1,7 +1,8 @@
 package com.dmilut.youtubeclone.controller;
 
+
 import com.dmilut.youtubeclone.dto.UploadVideoResponse;
-import com.dmilut.youtubeclone.dto.VideoDTO;
+import com.dmilut.youtubeclone.dto.VideoDto;
 import com.dmilut.youtubeclone.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,23 +25,18 @@ public class VideoController {
     @PostMapping("/thumbnail")
     @ResponseStatus(HttpStatus.CREATED)
     public String uploadThumbnail(@RequestParam("file") MultipartFile file, @RequestParam("videoId") String videoId) {
-
         return videoService.uploadThumbnail(file, videoId);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public VideoDTO editVideoMetadata(@RequestBody VideoDTO videoDTO) {
-
-        return videoService.editVideo(videoDTO);
+    public VideoDto editVideoMetadata(@RequestBody VideoDto videoDto) {
+        return videoService.editVideo(videoDto);
     }
 
     @GetMapping("/{videoId}")
     @ResponseStatus(HttpStatus.OK)
-    public VideoDTO getVideoDetails(@PathVariable String videoId) {
-        VideoDTO videoDTO = videoService.getVideoDetails(videoId);
-
-        return videoDTO;
+    public VideoDto getVideoDetails(@PathVariable String videoId) {
+        return videoService.getVideoDetails(videoId);
     }
-
 }

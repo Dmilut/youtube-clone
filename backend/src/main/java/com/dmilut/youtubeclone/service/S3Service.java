@@ -17,28 +17,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3Service implements FileService {
 
-    public static final String BUCKET_NAME = "youtube-clone2022";
-    private final AmazonS3Client amazonS3Client;
+    public static final String BUCKET_NAME = "youtube-demo-ptechie";
+    private final AmazonS3Client awsS3Client;
 
     @Override
-    public String uploadFile(MultipartFile multipartFile) {
-        String filenameExtension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
-        String key = UUID.randomUUID().toString() + "." + filenameExtension;
+    public String uploadFile(MultipartFile file) {
+        var filenameExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(multipartFile.getSize());
-        metadata.setContentType(multipartFile.getContentType());
+        var key = UUID.randomUUID().toString() + "." + filenameExtension;
+
+        var metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
 
         try {
-            amazonS3Client.putObject(BUCKET_NAME, key, multipartFile.getInputStream(), metadata);
-        } catch (IOException e) {
+            awsS3Client.putObject(BUCKET_NAME, key, file.getInputStream(), metadata);
+        } catch (IOException ioException) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "An exception occurred while uploading the file");
+                    "An Exception occured while uploading the file");
         }
 
-        amazonS3Client.setObjectAcl(BUCKET_NAME, key, CannedAccessControlList.PublicRead);
+        awsS3Client.setObjectAcl(BUCKET_NAME, key, CannedAccessControlList.PublicRead);
 
-        return amazonS3Client.getResourceUrl(BUCKET_NAME, key);
-
+        return awsS3Client.getResourceUrl(BUCKET_NAME, key);
     }
 }

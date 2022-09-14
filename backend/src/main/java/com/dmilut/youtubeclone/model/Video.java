@@ -27,6 +27,5 @@ public class Video {
     private VideoStatus videoStatus;
     private Integer viewCount;
     private String thumbnailUrl;
-    private List<Comment> comments;
-
+    private List<Comment> commentList;
 }

@@ -1,7 +1,8 @@
 package com.dmilut.youtubeclone.service;
 
+
 import com.dmilut.youtubeclone.dto.UploadVideoResponse;
-import com.dmilut.youtubeclone.dto.VideoDTO;
+import com.dmilut.youtubeclone.dto.VideoDto;
 import com.dmilut.youtubeclone.model.Video;
 import com.dmilut.youtubeclone.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,48 +18,49 @@ public class VideoService {
 
     public UploadVideoResponse uploadVideo(MultipartFile multipartFile) {
         String videoUrl = s3Service.uploadFile(multipartFile);
-        Video video = new Video();
+        var video = new Video();
         video.setVideoUrl(videoUrl);
 
-        Video savedVideo = videoRepository.save(video);
+        var savedVideo = videoRepository.save(video);
+        return new UploadVideoResponse(savedVideo.getId(), savedVideo.getVideoUrl());
 
-        return new UploadVideoResponse(savedVideo.getId(), videoUrl);
     }
 
-    public VideoDTO editVideo(VideoDTO videoDTO) {
-        Video savedVideo = getVideoById(videoDTO.getId());
+    public VideoDto editVideo(VideoDto videoDto) {
+        // Find the video by videoId
+        var savedVideo = getVideoById(videoDto.getId());
+        // Map the videoDto fields to video
+        savedVideo.setTitle(videoDto.getTitle());
+        savedVideo.setDescription(videoDto.getDescription());
+        savedVideo.setTags(videoDto.getTags());
+        savedVideo.setThumbnailUrl(videoDto.getThumbnailUrl());
+        savedVideo.setVideoStatus(videoDto.getVideoStatus());
 
-        savedVideo.setTitle(videoDTO.getTitle());
-        savedVideo.setDescription(videoDTO.getDescription());
-        savedVideo.setTags(videoDTO.getTags());
-        savedVideo.setVideoStatus(videoDTO.getVideoStatus());
-        savedVideo.setThumbnailUrl(videoDTO.getThumbnailUrl());
+        // save the video  to the database
+        videoRepository.save(savedVideo);
+        return videoDto;
+    }
+
+    public String uploadThumbnail(MultipartFile file, String videoId) {
+        var savedVideo = getVideoById(videoId);
+
+        String thumbnailUrl = s3Service.uploadFile(file);
+
+        savedVideo.setThumbnailUrl(thumbnailUrl);
 
         videoRepository.save(savedVideo);
-
-        return videoDTO;
+        return thumbnailUrl;
     }
 
-    public String uploadThumbnail(MultipartFile multipartFile, String videoId) {
-        Video savedVideo = getVideoById(videoId);
-
-        String thumbnailURL = s3Service.uploadFile(multipartFile);
-        savedVideo.setThumbnailUrl(thumbnailURL);
-
-        videoRepository.save(savedVideo);
-
-        return thumbnailURL;
-    }
-
-    private Video getVideoById(String videoId) {
+    Video getVideoById(String videoId) {
         return videoRepository.findById(videoId)
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find video by id " + videoId));
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find video by id - " + videoId));
     }
 
-    public VideoDTO getVideoDetails(String videoId) {
+    public VideoDto getVideoDetails(String videoId) {
         Video savedVideo = getVideoById(videoId);
 
-        VideoDTO videoDto = new VideoDTO();
+        VideoDto videoDto = new VideoDto();
         videoDto.setVideoUrl(savedVideo.getVideoUrl());
         videoDto.setThumbnailUrl(savedVideo.getThumbnailUrl());
         videoDto.setId(savedVideo.getId());
