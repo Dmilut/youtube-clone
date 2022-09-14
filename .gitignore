@@ -29,5 +29,14 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Node
+/frontend/node_modules/
+/frontend/package.json
+/frontend/package-lock.json
+npm-debug.log
+yarn-error.log
+
 ### VS Code ###
 .vscode/
+
+
